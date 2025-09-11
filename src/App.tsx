@@ -1,9 +1,14 @@
+import { VStack } from "@chakra-ui/react"
 import Header from "./components/Header"
+import Trending from "./components/Trending"
 
 const App = () => {
   return (
-    <div>  <Header/> </div>
-  )
+    <VStack gap={'20'}>
+      <Header />
+      <Trending />
+    </VStack>
+  );
 }
 
 export default App
