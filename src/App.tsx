@@ -5,7 +5,7 @@ import PopularSection from "./components/PopularSection";
 
 const App = () => {
   return (
-    <VStack gap={'20'}>
+    <VStack gap={'20'} p={'8'}>
       <Header />
       <Trending />
       <PopularSection/>

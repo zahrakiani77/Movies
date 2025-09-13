@@ -10,11 +10,11 @@ export const usePopularMovies=()=>{
     useEffect(()=>{
         setIsLoading(true)
         axiosInstance
-          .get(`/3/person/popular?language=en-US&page=1`)
+          .get(`/movie/popular?language=en-US&page=1`)
           .then((res) => {
             setData(res.data);
             setIsLoading(false);
-            console.log(res.data)
+            console.log(res.data);
           })
           .catch((err) => setError(err));
 }, []);
