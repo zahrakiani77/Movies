@@ -1,5 +1,5 @@
 import type { popularCardProps } from "@/types/popular.model";
-import { Card, Heading, Image, Stack } from "@chakra-ui/react";
+import { Card, Image, Stack } from "@chakra-ui/react";
 import { BiStar } from "react-icons/bi";
 
 
