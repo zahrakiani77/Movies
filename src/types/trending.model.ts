@@ -3,7 +3,7 @@ export type TrendingMovie = {
   backdrop_path: string | null;
   id: number;
   title?: string;
-  name?: string; // برای media_type هایی که اسمشون name هست (tv)
+  name?: string; 
   original_language: string;
   original_title?: string;
   overview: string;

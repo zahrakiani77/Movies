@@ -9,7 +9,7 @@ export const useTrending=()=>{
     useEffect(()=>{
         setisLoading(true);
         axiosInstance
-          .get(`/3/trending/all/day?language=en-US`)
+          .get(`/trending/all/day?language=en-US`)
           .then((res) => {
             setData(res.data);
              setisLoading(false);

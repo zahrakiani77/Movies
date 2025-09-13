@@ -1,15 +1,19 @@
-import { Heading, Stack } from '@chakra-ui/react'
+import { Grid, Heading, Stack } from '@chakra-ui/react'
 import CardWithNumber from './ui/CardWithNumber'
 
 const Trending = () => {
   return (
-    <Stack gap={'10'}>
+    <Stack>
       <Heading fontWeight={"semibold"} fontSize={"xl"}>
         Trending
       </Heading>
-      <Stack direction="row" gap={"20"}>
+      <Grid
+        templateColumns={{ base: "repeat(2, 1fr)", lg: "repeat(6, 1fr)" }}
+        templateRows={{ base: "repeat(3, 1fr)", lg: "repeat(1, 1fr)" }}
+        gap={{ base: "28", lg: "16" }}
+      >
         <CardWithNumber />
-      </Stack>
+      </Grid>
     </Stack>
   );
 }
