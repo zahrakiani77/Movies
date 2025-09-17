@@ -146,7 +146,7 @@ import {
   Spinner,
 } from "@chakra-ui/react";
 import { useColorModeValue } from "./ui/color-mode";
-import { BiStar, BiHeart, BiChevronRight, BiPlay } from "react-icons/bi";
+import { BiStar, BiHeart, BiPlay } from "react-icons/bi";
 import React from "react";
 
 interface MovieGenre {
@@ -177,7 +177,7 @@ const MovieDetail: React.FC = () => {
   const textColor = useColorModeValue("#fff", "#fff");
   const subText = useColorModeValue("#A1A1A1", "#A1A1A1");
   const tagBg = useColorModeValue("#26243A", "#26243A");
-  const btnBg = useColorModeValue("#7B5AFF", "#7B5AFF");
+  
 
   // Like / favorite state (persist in localStorage by movie id)
   const [liked, setLiked] = React.useState<boolean>(() => {
@@ -344,25 +344,7 @@ const MovieDetail: React.FC = () => {
             <DetailItem label="Popularity" value={movie.popularity?.toFixed(0)} />
           </Flex>
 
-          {/* Homepage button */}
-          <Button
-            bg={btnBg}
-            color={textColor}
-            _hover={{ bg: "#6A4FE0" }}
-            borderRadius="lg"
-            px={8}
-            py={2}
-            fontWeight="bold"
-          >
-            <a
-              href={`https://www.themoviedb.org/movie/${movie.id}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ color: 'inherit', textDecoration: 'none', display: 'flex', alignItems: 'center' }}
-            >
-              Visit Homepage <BiChevronRight style={{ marginLeft: 8 }} />
-            </a>
-          </Button>
+        
         </Box>
       </Flex>
     </Box>
