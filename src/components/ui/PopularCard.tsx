@@ -2,14 +2,20 @@ import { useGenres } from "../../hooks/useGenres";
 import type { popularCardProps } from "@/types/popular.model";
 import { Card, Image, Stack } from "@chakra-ui/react";
 import { BiStar } from "react-icons/bi";
-
+import { useNavigate } from "react-router-dom";
 
 const PopularCard = ({ movie }: popularCardProps) => {
   const { data: genres } = useGenres();
+  const navigate = useNavigate();
 
   const movieGenres = movie.genre_ids
     .map((id) => genres?.find((g) => g.id === id)?.name)
     .filter((name): name is string => !!name);
+
+  const handleClick = () => {
+    navigate(`/movie/${movie.id}`);
+  };
+
   return (
     <Card.Root
       variant={"elevated"}
@@ -20,6 +26,8 @@ const PopularCard = ({ movie }: popularCardProps) => {
       width={{ base: "200", lg: "100" }}
       height={{ base: "150", lg: "180" }}
       m={"3"}
+      style={{ cursor: "pointer" }}
+      onClick={handleClick}
     >
       <Card.Body gap="2">
         <Image
