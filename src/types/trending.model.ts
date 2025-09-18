@@ -8,6 +8,7 @@ export type TrendingMovie = {
   original_title?: string;
   overview: string;
   poster_path: string | null;
+  profile_path?: string | null; // for person media type
   media_type: string;
   genre_ids: number[];
   popularity: number;
