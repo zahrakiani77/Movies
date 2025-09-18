@@ -1,6 +1,7 @@
 import { useGenres } from "../../hooks/useGenres";
 import type { popularCardProps } from "@/types/popular.model";
 import { Card, Image, Stack } from "@chakra-ui/react";
+import { motion } from "framer-motion";
 import { BiStar } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
 import { useColorModeValue } from "./color-mode";
@@ -19,6 +20,10 @@ const PopularCard = ({ movie }: popularCardProps) => {
 
   return (
     <Card.Root
+      as={motion.div}
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
       variant={"elevated"}
       backgroundColor={"#0F0D23"}
       color={textColor}
