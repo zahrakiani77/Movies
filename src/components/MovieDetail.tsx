@@ -14,7 +14,7 @@ import {
 import { useColorModeValue } from "./ui/color-mode";
 import { BiStar, BiHeart, BiPlay } from "react-icons/bi";
 import React from "react";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 
 interface MovieGenre {
   id: number;
@@ -55,6 +55,7 @@ const MovieDetail: React.FC = () => {
   });
 
   const [likesCount, setLikesCount] = React.useState<number>(0);
+  const [isTrailerOpen, setIsTrailerOpen] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     if (!movie) return;
@@ -226,20 +227,20 @@ const MovieDetail: React.FC = () => {
                     "0 0 0 2px rgba(138,43,226,0.45), 0 0 22px 6px rgba(138,43,226,0.35), 0 0 44px 16px rgba(0,212,255,0.2)",
                 }}
               >
-                <a
-                  href={`https://www.youtube.com/watch?v=${trailer.key}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <button
+                  onClick={() => setIsTrailerOpen(true)}
                   style={{
+                    background: "transparent",
+                    border: "none",
                     color: "inherit",
-                    textDecoration: "none",
                     display: "flex",
                     alignItems: "center",
+                    cursor: "pointer",
                   }}
                 >
                   <BiPlay style={{ marginRight: 6, verticalAlign: "middle" }} />
                   Trailer · 00:31
-                </a>
+                </button>
               </motion.button>
             ) : null}
           </Box>
@@ -313,6 +314,60 @@ const MovieDetail: React.FC = () => {
           </motion.div>
         </Box>
       </Flex>
+      {/* Trailer Modal */}
+      <AnimatePresence>
+        {isTrailerOpen ? (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            style={{
+              position: "fixed",
+              inset: 0,
+              background: "rgba(0,0,0,0.6)",
+              backdropFilter: "blur(4px)",
+              WebkitBackdropFilter: "blur(4px)",
+              zIndex: 1000,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+            onClick={() => setIsTrailerOpen(false)}
+          >
+            <motion.div
+              initial={{ opacity: 0, y: 24, scale: 0.96 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 12, scale: 0.98 }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
+              style={{
+                width: "min(920px, 92vw)",
+                borderRadius: "16px",
+                overflow: "hidden",
+                boxShadow:
+                  "0 0 0 2px rgba(138,43,226,0.45), 0 0 22px 6px rgba(138,43,226,0.35), 0 0 44px 16px rgba(0,212,255,0.25)",
+                background: "#0F0D23",
+              }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <Box position="relative" w="100%" pt="56.25%">
+                <Box position="absolute" inset={0}>
+                  <iframe
+                    src={`https://www.youtube.com/embed/${trailer?.key}?autoplay=1`}
+                    title="Trailer"
+                    style={{ border: 0, width: "100%", height: "100%" }}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  />
+                </Box>
+              </Box>
+              <Flex justify="flex-end" p={3}>
+                <Button onClick={() => setIsTrailerOpen(false)}>Close</Button>
+              </Flex>
+            </motion.div>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
     </Box>
     </motion.div>
   );

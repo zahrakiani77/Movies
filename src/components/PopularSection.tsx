@@ -11,6 +11,7 @@ const PopularSection = () => {
         Popular
       </Heading>
 
+
       <Grid
         templateColumns={{ base: "repeat(1, 1fr)", lg: "repeat(4, 1fr)" }}
         templateRows={{ base: "repeat(2, 1fr)", lg: "repeat(3, 1fr)" }}
