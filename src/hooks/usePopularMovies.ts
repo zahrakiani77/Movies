@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 export const usePopularMovies=()=>{
     const [data,setData]=useState<PopulargModel>();
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [error, setError] = useState<String>('');
+    const [error, setError] = useState<string>('');
 
     useEffect(()=>{
         setIsLoading(true)
@@ -16,7 +16,10 @@ export const usePopularMovies=()=>{
             setIsLoading(false);
             console.log(res.data);
           })
-          .catch((err) => setError(err));
+          .catch((err) => {
+            setError(String(err));
+            setIsLoading(false);
+          });
 }, []);
 
 return{data,error,isLoading};
