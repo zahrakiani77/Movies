@@ -2,6 +2,7 @@ import { Grid, Heading, Stack } from "@chakra-ui/react";
 import PopularCard from "./ui/PopularCard"
 import { usePopularMovies } from "../hooks/usePopularMovies";
 
+
 const PopularSection = () => {
     const { data } = usePopularMovies();
   return (
@@ -11,7 +12,7 @@ const PopularSection = () => {
       </Heading>
 
       <Grid
-        templateColumns={{ base: "repeat(2, 1fr)", lg: "repeat(4, 1fr)" }}
+        templateColumns={{ base: "repeat(1, 1fr)", lg: "repeat(4, 1fr)" }}
         templateRows={{ base: "repeat(2, 1fr)", lg: "repeat(3, 1fr)" }}
         gap="6"
       >

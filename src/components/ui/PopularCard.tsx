@@ -3,11 +3,12 @@ import type { popularCardProps } from "@/types/popular.model";
 import { Card, Image, Stack } from "@chakra-ui/react";
 import { BiStar } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
+import { useColorModeValue } from "./color-mode";
 
 const PopularCard = ({ movie }: popularCardProps) => {
   const { data: genres } = useGenres();
   const navigate = useNavigate();
-
+ const textColor = useColorModeValue("#fff", "#fff");
   const movieGenres = movie.genre_ids
     .map((id) => genres?.find((g) => g.id === id)?.name)
     .filter((name): name is string => !!name);
@@ -20,6 +21,7 @@ const PopularCard = ({ movie }: popularCardProps) => {
     <Card.Root
       variant={"elevated"}
       backgroundColor={"#0F0D23"}
+      color={textColor}
       rounded={"xl"}
       shadow={"2xl"}
       border={"none"}
