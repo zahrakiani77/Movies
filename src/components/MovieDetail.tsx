@@ -174,7 +174,7 @@ const MovieDetail: React.FC = () => {
   const { id } = useParams();
   const { movie, trailer, loading, error } = useMovieDetail(id);
   const bg = useColorModeValue("#18152A", "#18152A");
-  const textColor = useColorModeValue("#fff", "#fff");
+  // const textColor = useColorModeValue("#fff", "#fff");
   const subText = useColorModeValue("#A1A1A1", "#A1A1A1");
   const tagBg = useColorModeValue("#26243A", "#26243A");
   
@@ -221,13 +221,13 @@ const MovieDetail: React.FC = () => {
 
   if (loading)
     return (
-      <Flex justify="center" align="center" h="60vh" color={textColor}>
+      <Flex justify="center" align="center" h="60vh" >
         <Spinner size="xl" />
       </Flex>
     );
   if (error)
     return (
-      <Box color={textColor} p={8} textAlign="center">
+      <Box p={8} textAlign="center">
         {error}
       </Box>
     );
@@ -236,7 +236,7 @@ const MovieDetail: React.FC = () => {
   const movieGenres: string[] = movie.genres ? movie.genres.map((g: MovieGenre) => g.name) : [];
 
   return (
-    <Box bg={bg} color={textColor} p={8} borderRadius="2xl" maxW="1200px" mx="auto">
+    <Box bg={bg}  p={8} borderRadius="2xl" maxW="1200px" mx="auto">
       {/* Title + Rating */}
       <Flex justify="space-between" align="center" mb={8} wrap="wrap">
   <VStack align="start" gap={1}>
@@ -293,8 +293,8 @@ const MovieDetail: React.FC = () => {
                 position="absolute"
                 bottom="4"
                 left="4"
-                _hover={{ bg: "rgba(0,0,0,0.8)" }}
-                color="#fff"
+                
+                
                 borderRadius="full"
                 px={4}
                 py={2}
@@ -320,7 +320,7 @@ const MovieDetail: React.FC = () => {
               <Box
                 key={i}
                 bg={tagBg}
-                color={textColor}
+                
                 px={4}
                 py={1}
                 fontWeight="bold"
