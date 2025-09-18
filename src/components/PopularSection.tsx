@@ -7,7 +7,7 @@ const PopularSection = () => {
     const { data } = usePopularMovies();
   return (
     <Stack gap={"10"}>
-      <Heading fontWeight={"semibold"} fontSize={"xl"}>
+      <Heading fontWeight={"semibold"} fontSize={"xl"} textAlign={"center"}>
         Popular
       </Heading>
 
