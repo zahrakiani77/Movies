@@ -14,6 +14,7 @@ import {
 import { useColorModeValue } from "./ui/color-mode";
 import { BiStar, BiHeart, BiPlay } from "react-icons/bi";
 import React from "react";
+import { motion } from "framer-motion";
 
 interface MovieGenre {
   id: number;
@@ -100,7 +101,25 @@ const MovieDetail: React.FC = () => {
     : [];
 
   return (
-    <Box bg={bg} p={8} borderRadius="2xl" maxW="1200px" mx="auto">
+    <motion.div
+      initial={{ opacity: 0, y: 24, filter: "blur(8px)" }}
+      animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+    >
+    <Box bg={bg} p={8} borderRadius="2xl" maxW="1200px" mx="auto" position="relative" overflow="hidden">
+      <Box
+        position="absolute"
+        inset={0}
+        pointerEvents="none"
+        sx={{
+          maskImage: "radial-gradient(ellipse at 20% 10%, black 20%, transparent 60%)",
+        }}
+        filter="blur(28px)"
+        opacity={0.25}
+      >
+        <Box position="absolute" top="-20%" left="-10%" w="60%" h="60%" bgGradient="radial(#8A2BE2, transparent 60%)" />
+        <Box position="absolute" bottom="-25%" right="-10%" w="60%" h="60%" bgGradient="radial(#00D4FF, transparent 60%)" />
+      </Box>
       {/* Title + Rating */}
       <Flex justify="space-between" align="center" mb={8} wrap="wrap">
         <VStack align="start" gap={1}>
@@ -130,6 +149,13 @@ const MovieDetail: React.FC = () => {
 
       <Flex gap={8} direction={{ base: "column", md: "row" }}>
         {/* Poster */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.96, y: 8 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ duration: 0.5, ease: "easeOut", delay: 0.05 }}
+          whileHover={{ rotate: -0.5, scale: 1.02 }}
+          style={{ willChange: "transform" }}
+        >
         <Box
           minW={{ base: "100%", md: "220px" }}
           maxW={{ base: "100%", md: "220px" }}
@@ -155,10 +181,16 @@ const MovieDetail: React.FC = () => {
             }}
           />
         </Box>
+        </motion.div>
 
         {/* Right Section */}
         <Box flex="1">
           {/* Banner with trailer button */}
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, ease: "easeOut", delay: 0.1 }}
+          >
           <Box mb={6} borderRadius="xl" overflow="hidden" position="relative">
             <Image
               src={
@@ -176,7 +208,7 @@ const MovieDetail: React.FC = () => {
               }}
             />
             {trailer ? (
-              <Button
+              <motion.button
                 position="absolute"
                 bottom="4"
                 left="4"
@@ -185,6 +217,14 @@ const MovieDetail: React.FC = () => {
                 py={2}
                 fontWeight="bold"
                 fontSize="sm"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.96 }}
+                style={{
+                  background: "#26243A",
+                  color: "#A1A1A1",
+                  boxShadow:
+                    "0 0 0 2px rgba(138,43,226,0.45), 0 0 22px 6px rgba(138,43,226,0.35), 0 0 44px 16px rgba(0,212,255,0.2)",
+                }}
               >
                 <a
                   href={`https://www.youtube.com/watch?v=${trailer.key}`}
@@ -200,50 +240,81 @@ const MovieDetail: React.FC = () => {
                   <BiPlay style={{ marginRight: 6, verticalAlign: "middle" }} />
                   Trailer · 00:31
                 </a>
-              </Button>
+              </motion.button>
             ) : null}
           </Box>
+          </motion.div>
 
           {/* Genres */}
           <HStack gap={3} mb={4} flexWrap="wrap">
             {movieGenres.map((g, i) => (
-              <Box
+              <motion.div
                 key={i}
-                bg={tagBg}
-                px={4}
-                py={1}
-                fontWeight="bold"
-                borderRadius="md"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.35, ease: "easeOut", delay: 0.12 + i * 0.04 }}
               >
-                {g}
-              </Box>
+                <Box
+                  bg={tagBg}
+                  px={4}
+                  py={1}
+                  fontWeight="bold"
+                  borderRadius="md"
+                  boxShadow="0 0 0 1px rgba(138,43,226,0.35)"
+                >
+                  {g}
+                </Box>
+              </motion.div>
             ))}
           </HStack>
 
           {/* Overview */}
-          <Text mb={6} fontSize="md" lineHeight="tall">
-            {movie.overview}
-          </Text>
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, ease: "easeOut", delay: 0.18 }}
+          >
+            <Text mb={6} fontSize="md" lineHeight="tall">
+              {movie.overview}
+            </Text>
+          </motion.div>
 
           {/* Details */}
-          <Flex wrap="wrap" gap={6} mb={6}>
-            <DetailItem label="Release date" value={movie.release_date} />
-            <DetailItem
-              label="Language"
-              value={movie.original_language?.toUpperCase()}
-            />
-            <DetailItem
-              label="Vote count"
-              value={movie.vote_count?.toString()}
-            />
-            <DetailItem
-              label="Popularity"
-              value={movie.popularity?.toFixed(0)}
-            />
-          </Flex>
+          <motion.div
+            initial="hidden"
+            animate="show"
+            variants={{
+              hidden: { opacity: 1 },
+              show: {
+                opacity: 1,
+                transition: { staggerChildren: 0.06, delayChildren: 0.2 },
+              },
+            }}
+          >
+            <Flex wrap="wrap" gap={6} mb={6}>
+              {[{
+                label: "Release date",
+                value: movie.release_date,
+              }, {
+                label: "Language",
+                value: movie.original_language?.toUpperCase(),
+              }, {
+                label: "Vote count",
+                value: movie.vote_count?.toString(),
+              }, {
+                label: "Popularity",
+                value: movie.popularity?.toFixed(0),
+              }].map((d, idx) => (
+                <motion.div key={idx} variants={{ hidden: { opacity: 0, y: 8 }, show: { opacity: 1, y: 0 } }}>
+                  <DetailItem label={d.label} value={d.value || "-"} />
+                </motion.div>
+              ))}
+            </Flex>
+          </motion.div>
         </Box>
       </Flex>
     </Box>
+    </motion.div>
   );
 };
 
