@@ -28,7 +28,7 @@ const PopularSection = () => {
                 p="3"
               >
                 <Skeleton height="150px" width="100%" rounded="xl" />
-                <SkeletonText mt="4" noOfLines={2} spacing="2" width="80%" />
+                <SkeletonText mt="4" noOfLines={2}  width="80%" />
               </VStack>
             ))
           : data?.results.map((movies) => (

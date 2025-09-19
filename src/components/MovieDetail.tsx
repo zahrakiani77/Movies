@@ -174,7 +174,7 @@ const MovieDetail: React.FC = () => {
             }
             alt={movie.title}
             w="100%"
-            h={{ base: "400px", md: "330px" }} // ارتفاع موبایل کمی بیشتر
+            h={{ base: "400px", md: "330px" }} 
             objectFit="cover"
             onError={(e) => {
               e.currentTarget.onerror = null;
@@ -211,7 +211,7 @@ const MovieDetail: React.FC = () => {
             {trailer ? (
               <motion.button
                 position="absolute"
-                bottom="4"
+                bottom={4}
                 left="4"
                 borderRadius="full"
                 px={4}
