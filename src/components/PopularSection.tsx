@@ -1,31 +1,32 @@
-
 import {
+  Box,
+  Button,
   Grid,
   Heading,
-  Stack,
-  Button,
+  Skeleton,
+  SkeletonText,
   Spinner,
-  Box,
+  Stack,
 } from "@chakra-ui/react";
-import PopularCard from "./ui/PopularCard";
-import { usePopularMovies } from "../hooks/usePopularMovies";
-import { useState, useRef, useEffect } from "react";
-import { ChevronRight, ChevronLeft } from "lucide-react";
 import { motion } from "framer-motion";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+
+import type { PopularMovie } from "@/types/popular.model";
+import { usePopularMovies } from "../hooks/usePopularMovies";
+import PopularCard from "./ui/PopularCard";
 
 const MotionBox = motion(Box);
 
-
-import type { PopularMovie, PopulargModel } from "../types/popular.model";
-
-
 const PopularSection = () => {
   const [page, setPage] = useState(1);
-  const { data, isLoading, isFetching } = usePopularMovies(page) as {
-    data: PopulargModel | undefined;
-    isLoading: boolean;
-    isFetching: boolean;
-  };
+  const {
+    data,
+    isLoading,
+    isFetching,
+    isError,
+    error,
+  } = usePopularMovies(page);
   const popularRef = useRef<HTMLDivElement>(null);
 
   const handleNext = () => {
@@ -41,7 +42,20 @@ const PopularSection = () => {
     }
   }, [page]);
 
-  if (!data && isLoading) return null;
+  const isInitialLoading = isLoading && !data;
+
+  if (isError) {
+    return (
+      <Stack gap="10" ref={popularRef}>
+        <Heading fontWeight="semibold" fontSize="xl" textAlign="center">
+          Popular
+        </Heading>
+        <Box textAlign="center" color="red.300">
+          {(error as Error)?.message ?? "Failed to load popular movies."}
+        </Box>
+      </Stack>
+    );
+  }
 
   return (
     <Stack gap="10" ref={popularRef}>
@@ -53,7 +67,21 @@ const PopularSection = () => {
         templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(3, 1fr)", lg: "repeat(4, 1fr)" }}
         gap="6"
       >
-  {data?.results.map((movie: PopularMovie) => (
+        {isInitialLoading
+          ? Array.from({ length: 12 }).map((_, idx) => (
+              <Stack
+                key={`popular-skeleton-${idx}`}
+                bg="#0F0D23"
+                rounded="xl"
+                shadow="2xl"
+                overflow="hidden"
+                p="3"
+              >
+                <Skeleton height="150px" width="100%" rounded="xl" />
+                <SkeletonText mt="4" noOfLines={2} width="80%" />
+              </Stack>
+            ))
+          : data?.results.map((movie: PopularMovie) => (
           <MotionBox
             key={movie.id}
             position="relative"
@@ -79,7 +107,7 @@ const PopularSection = () => {
               </Box>
             )}
           </MotionBox>
-        ))}
+            ))}
       </Grid>
 
       <MotionBox
@@ -105,7 +133,7 @@ const PopularSection = () => {
 
         <Button
           onClick={handleNext}
-          disabled={!!data && page >= data.total_pages || isFetching}
+          disabled={(!!data && page >= data.total_pages) || isFetching}
         >
           <ChevronRight />
         </Button>

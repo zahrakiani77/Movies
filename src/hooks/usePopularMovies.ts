@@ -25,12 +25,12 @@
 // return{data,error,isLoading};
 // }
 
-import type { PopulargModel } from "@/types/popular.model";
+import type { PopularMoviesResponse } from "@/types/popular.model";
 import { axiosInstance } from "../utils/lib";
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 
 export const usePopularMovies = (page: number) => {
-  return useQuery<PopulargModel>({
+  return useQuery<PopularMoviesResponse>({
     queryKey: ["popular-movies", page],
     queryFn: async () => {
       const res = await axiosInstance.get(
@@ -38,6 +38,6 @@ export const usePopularMovies = (page: number) => {
       );
       return res.data;
     },
-    keepPreviousData: true,
+    placeholderData: keepPreviousData,
   });
 };
