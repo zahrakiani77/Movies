@@ -1,15 +1,15 @@
 import { useGenres } from "../../hooks/useGenres";
-import type { popularCardProps } from "@/types/popular.model";
+import type { PopularCardProps } from "@/types/popular.model";
 import { Card, Image, Stack } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import { BiStar } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
 import { useColorModeValue } from "./color-mode";
 
-const PopularCard = ({ movie }: popularCardProps) => {
+const PopularCard = ({ movie }: PopularCardProps) => {
   const { data: genres } = useGenres();
   const navigate = useNavigate();
- const textColor = useColorModeValue("#fff", "#fff");
+  const textColor = useColorModeValue("#fff", "#fff");
   const movieGenres = movie.genre_ids
     .map((id) => genres?.find((g) => g.id === id)?.name)
     .filter((name): name is string => !!name);
@@ -19,34 +19,35 @@ const PopularCard = ({ movie }: popularCardProps) => {
   };
 
   return (
-    <Card.Root
-      as={motion.div}
+    <motion.div
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease: "easeOut" }}
-      variant={"elevated"}
-      backgroundColor={"#0F0D23"}
-      color={textColor}
-      rounded={"xl"}
-      shadow={"2xl"}
-      border={"none"}
-      width={{ base: "200", lg: "100" }}
-      height={{ base: "150", lg: "180" }}
-      m={"3"}
-      style={{ cursor: "pointer" }}
-      overflow={"hidden"}
-      transition={"transform 250ms ease, box-shadow 300ms ease"}
-      transform={"translateY(0) scale(1)"}
-      willChange={"transform"}
-      boxShadow={"0 0 0 0 rgba(138,43,226,0), 0 0 0 0 rgba(0,212,255,0)"}
-      _hover={{
-        transform: "translateY(-4px) scale(1.02)",
-        shadow: "dark-lg",
-        boxShadow:
-          "0 0 0 2px rgba(138,43,226,0.55), 0 0 22px 6px rgba(138,43,226,0.45), 0 0 44px 16px rgba(0,212,255,0.25)",
-      }}
-      onClick={handleClick}
     >
+      <Card.Root
+        variant={"elevated"}
+        backgroundColor={"#0F0D23"}
+        color={textColor}
+        rounded={"xl"}
+        shadow={"2xl"}
+        border={"none"}
+        width={{ base: "200", lg: "100" }}
+        height={{ base: "150", lg: "180" }}
+        m={"3"}
+        style={{ cursor: "pointer" }}
+        overflow={"hidden"}
+        transition={"transform 250ms ease, box-shadow 300ms ease"}
+        transform={"translateY(0) scale(1)"}
+        willChange={"transform"}
+        boxShadow={"0 0 0 0 rgba(138,43,226,0), 0 0 0 0 rgba(0,212,255,0)"}
+        _hover={{
+          transform: "translateY(-4px) scale(1.02)",
+          shadow: "dark-lg",
+          boxShadow:
+            "0 0 0 2px rgba(138,43,226,0.55), 0 0 22px 6px rgba(138,43,226,0.45), 0 0 44px 16px rgba(0,212,255,0.25)",
+        }}
+        onClick={handleClick}
+      >
       <Card.Body gap="2">
         <Image
           src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
@@ -72,7 +73,8 @@ const PopularCard = ({ movie }: popularCardProps) => {
           </Stack>
         </Stack>
       </Card.Footer>
-    </Card.Root>
+  </Card.Root>
+    </motion.div>
   );
 };
 

@@ -112,11 +112,14 @@ const MovieDetail: React.FC = () => {
         position="absolute"
         inset={0}
         pointerEvents="none"
-        sx={{
-          maskImage: "radial-gradient(ellipse at 20% 10%, black 20%, transparent 60%)",
-        }}
         filter="blur(28px)"
         opacity={0.25}
+        style={{
+          WebkitMaskImage:
+            "radial-gradient(ellipse at 20% 10%, black 20%, transparent 60%)",
+          maskImage:
+            "radial-gradient(ellipse at 20% 10%, black 20%, transparent 60%)",
+        }}
       >
         <Box position="absolute" top="-20%" left="-10%" w="60%" h="60%" bgGradient="radial(#8A2BE2, transparent 60%)" />
         <Box position="absolute" bottom="-25%" right="-10%" w="60%" h="60%" bgGradient="radial(#00D4FF, transparent 60%)" />
@@ -209,39 +212,37 @@ const MovieDetail: React.FC = () => {
               }}
             />
             {trailer ? (
-              <motion.button
-                position="absolute"
-                bottom={4}
-                left="4"
-                borderRadius="full"
-                px={4}
-                py={2}
-                fontWeight="bold"
-                fontSize="sm"
+              <motion.div
+                initial={{ opacity: 0, y: 12, scale: 0.94 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.96 }}
+                transition={{ duration: 0.25, ease: "easeOut" }}
                 style={{
-                  background: "#26243A",
-                  color: "#A1A1A1",
-                  boxShadow:
-                    "0 0 0 2px rgba(138,43,226,0.45), 0 0 22px 6px rgba(138,43,226,0.35), 0 0 44px 16px rgba(0,212,255,0.2)",
+                  position: "absolute",
+                  bottom: 16,
+                  left: 16,
                 }}
               >
-                <button
+                <Button
                   onClick={() => setIsTrailerOpen(true)}
-                  style={{
-                    background: "transparent",
-                    border: "none",
-                    color: "inherit",
-                    display: "flex",
-                    alignItems: "center",
-                    cursor: "pointer",
-                  }}
+                  borderRadius="full"
+                  px={4}
+                  py={2}
+                  fontWeight="bold"
+                  fontSize="sm"
+                  bg="#26243A"
+                  color="#A1A1A1"
+                  boxShadow="0 0 0 2px rgba(138,43,226,0.45), 0 0 22px 6px rgba(138,43,226,0.35), 0 0 44px 16px rgba(0,212,255,0.2)"
+                  display="flex"
+                  alignItems="center"
+                  gap={2}
+                  _hover={{ bg: "#2F2C45" }}
                 >
-                  <BiPlay style={{ marginRight: 6, verticalAlign: "middle" }} />
+                  <BiPlay style={{ marginRight: 2, verticalAlign: "middle" }} />
                   Trailer · 00:31
-                </button>
-              </motion.button>
+                </Button>
+              </motion.div>
             ) : null}
           </Box>
           </motion.div>
