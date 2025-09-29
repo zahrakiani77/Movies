@@ -266,7 +266,6 @@ import {
   Grid,
   Heading,
   Stack,
-  VStack,
   Button,
   Spinner,
   Box,
@@ -279,9 +278,23 @@ import { motion } from "framer-motion";
 
 const MotionBox = motion(Box);
 
+
+type Movie = {
+  id: number;
+  // add other fields as needed
+};
+type PopularMoviesResponse = {
+  results: Movie[];
+  total_pages: number;
+};
+
 const PopularSection = () => {
   const [page, setPage] = useState(1);
-  const { data, isLoading, isFetching } = usePopularMovies(page);
+  const { data, isLoading, isFetching } = usePopularMovies(page) as {
+    data: PopularMoviesResponse | undefined;
+    isLoading: boolean;
+    isFetching: boolean;
+  };
   const popularRef = useRef<HTMLDivElement>(null);
 
   const handleNext = () => {
@@ -309,7 +322,7 @@ const PopularSection = () => {
         templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(3, 1fr)", lg: "repeat(4, 1fr)" }}
         gap="6"
       >
-        {data?.results.slice(0, 12).map((movie) => (
+        {data?.results.slice(0, 12).map((movie: Movie) => (
           <MotionBox
             key={movie.id}
             position="relative"
@@ -347,11 +360,11 @@ const PopularSection = () => {
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.3 }}
       >
-        <Button onClick={handlePrev} isDisabled={page === 1 || isFetching}>
+        <Button onClick={handlePrev} disabled={page === 1 || isFetching}>
           <ChevronLeft />
         </Button>
 
-        <Box minW="60px" textAlign="center">
+        <Box minW="60px" textAlign="center">  
           {isFetching && !isLoading ? (
             <Spinner size="sm" color="purple.400" />
           ) : (
@@ -361,7 +374,7 @@ const PopularSection = () => {
 
         <Button
           onClick={handleNext}
-          isDisabled={data && page >= data.total_pages || isFetching}
+          disabled={!!data && page >= data.total_pages || isFetching}
         >
           <ChevronRight />
         </Button>
