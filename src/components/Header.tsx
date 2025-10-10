@@ -24,7 +24,7 @@ const Header = () => {
     if(value.length === 0){
       clearSearch();
       // Smoothly scroll to top when clearing search to avoid layout jump
-      try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch {}
+  try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch { /* no-op */ }
       return;
     }
 
@@ -32,7 +32,7 @@ const Header = () => {
     // Blur the input so the browser doesn't try to keep it in view during layout changes
     // which can cause a visible "jump"
     setTimeout(() => searchRef.current?.blur(), 0);
-    try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch {}
+  try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch { /* no-op */ }
   };
 
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {

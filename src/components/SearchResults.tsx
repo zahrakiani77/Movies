@@ -3,6 +3,8 @@ import {
   Button,
   Grid,
   Heading,
+  HStack,
+  Badge,
   Skeleton,
   SkeletonText,
   Spinner,
@@ -29,6 +31,11 @@ const SearchResults = () => {
     setPage(1);
   }, [searchTerm]);
 
+  useEffect(() => {
+    // Keep viewport consistent when changing search pages
+    try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch { /* no-op */ }
+  }, [page]);
+
   const {
     data,
     isLoading,
@@ -39,6 +46,8 @@ const SearchResults = () => {
 
   const hasResults = (data?.results?.length ?? 0) > 0;
   const isInitialLoading = isLoading && !data;
+  const totalResults = data?.total_results ?? 0;
+  const totalPages = data?.total_pages ?? 1;
 
   const heading = useMemo(() => {
     if (!searchTerm) {
@@ -52,15 +61,50 @@ const SearchResults = () => {
   }
 
   return (
-    <Stack gap="10">
-      <Stack direction="row" alignItems="center" justifyContent="space-between">
-        <Heading fontWeight="semibold" fontSize="xl" textAlign="center">
-          {heading}
+    <Stack gap="6" minH="70vh">
+      <Stack
+        direction="row"
+        alignItems="center"
+        justifyContent="space-between"
+        w="full"
+      >
+        <Heading fontWeight="semibold" fontSize={{ base: "lg", md: "xl" }}>
+          {searchTerm ? (
+            <>
+              Results for <Text as="span" color="purple.300">“{searchTerm}”</Text>
+            </>
+          ) : (
+            heading
+          )}
         </Heading>
-        <Button variant="outline" size="sm" onClick={clearSearch} disabled={isFetching}>
-          Clear search
-        </Button>
+        <HStack gap={3}>
+          {searchTerm && !isInitialLoading && (
+            <Badge
+              colorPalette="purple"
+              variant="subtle"
+              rounded="full"
+              px={3}
+              py={1}
+            >
+              {totalResults.toLocaleString()} results
+            </Badge>
+          )}
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={clearSearch}
+            disabled={isFetching}
+          >
+            Clear search
+          </Button>
+        </HStack>
       </Stack>
+
+      {searchTerm && hasResults && (
+        <HStack color="#A1A1A1" fontSize="sm">
+          <span>Page {page} of {totalPages.toLocaleString()}</span>
+        </HStack>
+      )}
 
       {isError ? (
         <Text textAlign="center" color="red.300">
@@ -68,6 +112,14 @@ const SearchResults = () => {
         </Text>
       ) : (
         <>
+        <Box
+          bg="#0F0D23"
+          rounded="2xl"
+          shadow="xl"
+          border="1px solid"
+          borderColor="rgba(138,43,226,0.15)"
+          p={{ base: 3, md: 4 }}
+        >
           <Grid
             templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(3, 1fr)", lg: "repeat(4, 1fr)" }}
             gap="6"
@@ -115,12 +167,21 @@ const SearchResults = () => {
                   </MotionBox>
                 ))
               : (
-                  <Text textAlign="center" gridColumn="1 / -1" color="gray.300">
-                    No matches found. Try a different title.
-                  </Text>
+                  <Stack
+                    gridColumn="1 / -1"
+                    alignItems="center"
+                    justifyContent="center"
+                    py={10}
+                    gap={3}
+                    color="gray.300"
+                  >
+                    <Text>No matches found for “{searchTerm}”.</Text>
+                    <Button size="sm" variant="outline" onClick={clearSearch}>
+                      Clear search
+                    </Button>
+                  </Stack>
                 )}
           </Grid>
-
           {hasResults && (
             <MotionBox
               display="flex"
@@ -130,20 +191,34 @@ const SearchResults = () => {
               initial={{ opacity: 0.8, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.3 }}
+              mt={6}
             >
-              <Button onClick={() => setPage((prev) => Math.max(prev - 1, 1))} disabled={page === 1 || isFetching}>
+              <Button
+                aria-label="Previous page"
+                variant="outline"
+                colorPalette="purple"
+                size="sm"
+                onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+                disabled={page === 1 || isFetching}
+              >
                 <ChevronLeft />
               </Button>
 
-              <Box minW="60px" textAlign="center">
+              <Box minW="120px" textAlign="center">
                 {isFetching && !isLoading ? (
                   <Spinner size="sm" color="purple.400" />
                 ) : (
-                  <span>page {page}</span>
+                  <Text fontSize="sm" color="#A1A1A1">
+                    page {page} of {totalPages.toLocaleString()}
+                  </Text>
                 )}
               </Box>
 
               <Button
+                aria-label="Next page"
+                variant="outline"
+                colorPalette="purple"
+                size="sm"
                 onClick={() => {
                   if (data && page < data.total_pages) {
                     setPage((prev) => prev + 1);
@@ -155,6 +230,7 @@ const SearchResults = () => {
               </Button>
             </MotionBox>
           )}
+        </Box>
         </>
       )}
     </Stack>

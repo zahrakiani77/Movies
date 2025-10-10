@@ -1,5 +1,6 @@
 
 import { VStack } from "@chakra-ui/react";
+import { motion, AnimatePresence } from "framer-motion";
 import Header from "./components/Header";
 import Trending from "./components/TrendingSection";
 import PopularSection from "./components/PopularSection";
@@ -19,12 +20,22 @@ const App = () => {
           <VStack gap={'20'} p={'8'}>
             <Header />
             <SearchResults />
-            {!searchTerm && (
-              <>
-                <Trending />
-                <PopularSection />
-              </>
-            )}
+            <AnimatePresence initial={false}>
+              {!searchTerm && (
+                <motion.div
+                  style={{ width: '100%' }}
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.3, ease: 'easeOut' }}
+                >
+                  <VStack gap={'20'} w={'full'}>
+                    <Trending />
+                    <PopularSection />
+                  </VStack>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </VStack>
         }
       />
