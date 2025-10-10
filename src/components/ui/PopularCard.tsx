@@ -10,9 +10,13 @@ const PopularCard = ({ movie }: PopularCardProps) => {
   const { data: genres } = useGenres();
   const navigate = useNavigate();
   const textColor = useColorModeValue("#fff", "#fff");
-  const movieGenres = movie.genre_ids
+  const movieGenres = (movie.genre_ids ?? [])
     .map((id) => genres?.find((g) => g.id === id)?.name)
     .filter((name): name is string => !!name);
+
+  const posterSrc = movie.poster_path
+    ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+    : "/fallback-poster.png";
 
   const handleClick = () => {
     navigate(`/movie/${movie.id}`);
@@ -50,13 +54,18 @@ const PopularCard = ({ movie }: PopularCardProps) => {
       >
       <Card.Body gap="2">
         <Image
-          src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+          src={posterSrc}
           rounded={"xl"}
           width={{ base: "200", lg: "80" }}
           height={{ base: "150", lg: "150" }}
           transition="transform 350ms ease"
           transform="scale(1)"
           _groupHover={{ transform: "scale(1.06)" }}
+          alt={movie.title}
+          onError={(event) => {
+            event.currentTarget.onerror = null;
+            event.currentTarget.src = "/fallback-poster.png";
+          }}
         ></Image>
       </Card.Body>
       <Card.Footer>
@@ -66,7 +75,7 @@ const PopularCard = ({ movie }: PopularCardProps) => {
           </Card.Title>
           <Stack direction="row">
             <BiStar size={16} color="#ffff00" strokeWidth={2} />
-            <p>{movie.vote_average}</p>
+            <p>{movie.vote_average?.toFixed?.(1) ?? movie.vote_average}</p>
             {movieGenres.slice(0,2).map((genre) => (
               <p key={genre}>{genre}</p>
             ))}
